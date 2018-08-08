@@ -11,7 +11,7 @@ namespace BlazorQuiz.Services
     {
         public List<Category> Categories { get; private set; }
         public List<Question> Questions { get; private set; }
-        public List<Quiz> Quizzes { get; private set; } = new List<Quiz>();
+        public List<Quiz> Quizzes { get; } = new List<Quiz>();
         public bool ApiError { get; private set; }
 
         private readonly IQuizApiService _quizService;

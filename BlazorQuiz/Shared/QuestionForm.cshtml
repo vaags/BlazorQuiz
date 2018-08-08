@@ -3,12 +3,12 @@
 @inject DataStoreService Store
 <div class="card mb-3">
     <div class="card-body">
-        <p class="lead">@question.question</p>
+        <p class="lead">@((MarkupString)question.question)</p>
         <ul class="list-unstyled">
             @foreach (var o in options)
             {
                 <li class="mb-2">
-                    <button class="btn btn-lg @GetButtonCssClass(o)" onclick="@(() => EvaluateAnswer(o))">@o</button>
+                    <button class="btn btn-lg @GetButtonCssClass(o)" onclick="@(() => EvaluateAnswer(o))">@((MarkupString)o)</button>
                     @if (question.Answer.SelectedAnswer == o)
                     {
                         if (question.Answer.IsCorrect)
@@ -19,7 +19,7 @@
                         {
                             <span class="lead ml-2">
                                 Incorrect. 😨 The answer is
-                                <span class="text-primary">@question.Correct_answer</span>
+                                <span class="text-primary">@((MarkupString)question.Correct_answer)</span>
                             </span>
                         }
                     }
