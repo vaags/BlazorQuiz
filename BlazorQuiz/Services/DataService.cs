@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace BlazorQuiz.Services
 {
-    public class DataStoreService
+    public class DataService
     {
         public List<Category> Categories { get; private set; }
         public List<Question> Questions { get; private set; }
         public List<Quiz> Quizzes { get; } = new List<Quiz>();
         public bool ApiError { get; private set; }
 
-        private readonly IQuizApiService _quizService;
+        private readonly IApiService _quizService;
 
-        public DataStoreService(IQuizApiService quizService)
+        public DataService(IApiService quizService)
         {
             _quizService = quizService;
         }
@@ -51,12 +51,13 @@ namespace BlazorQuiz.Services
                 if (result?.Response_code == ResponseCode.Success)
                 {
                     Questions = result.Results.ToList();
+                    ApiError = true;
                 }
                 else
                 {
                     ApiError = true;
                 }
-            }
+                            }
             catch (Exception)
             {
                 ApiError = true;

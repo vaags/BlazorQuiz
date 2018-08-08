@@ -1,10 +1,4 @@
-﻿@using BlazorQuiz.Services
-@inject DataStoreService Store
-
-@if (Store.ApiError)
-{
-    <div class="alert alert-danger">
-        <span class="oi oi-warning mr-2"></span>
-        Could not get quiz data from server. Please try again later.
-    </div>
-}
+﻿<div class="alert alert-danger">
+    <span class="oi oi-warning mr-2"></span>
+    Could not get quiz data from server. Please try again later.
+</div>

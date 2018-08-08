@@ -1,10 +1,15 @@
 ﻿@page "/quiz/{categoryId:int}"
 @using BlazorQuiz.Services
 @using BlazorQuiz.Entities
-@inject DataStoreService Store
+@inject DataService Store
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <h1 class="mb-3">@categoryName</h1>
+
+@if (Store.ApiError)
+{
+    <AlertBox />
+}
 
 @if (isLoading)
 {

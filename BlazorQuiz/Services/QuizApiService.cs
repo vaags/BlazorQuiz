@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Blazor;
 
 namespace BlazorQuiz.Services
 {
-    public interface IQuizApiService
+    public interface IApiService
     {
         Task<CategoryApiResponse> GetCategories();
         Task<QuestionApiResponse> GetQuestions(int categoryId, int amount = 10);
     }
 
-    public class QuizApiService : IQuizApiService
+    public class ApiService : IApiService
     {
         private const string URL = "https://opentdb.com";
         private readonly HttpClient http;
 
-        public QuizApiService(HttpClient httpClient)
+        public ApiService(HttpClient httpClient)
         {
             http = httpClient;
         }

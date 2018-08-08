@@ -8,8 +8,8 @@ namespace BlazorQuiz
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IQuizApiService, QuizApiService>();
-            services.AddSingleton<DataStoreService>();
+            services.AddSingleton<IApiService, ApiService>();
+            services.AddSingleton<DataService>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)

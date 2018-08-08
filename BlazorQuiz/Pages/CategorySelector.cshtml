@@ -1,8 +1,13 @@
 ﻿@page "/categoryselector"
 @using BlazorQuiz.Services
-@inject DataStoreService Store
+@inject DataService Store
 
 <h1 class="mb-3">Select a category</h1>
+
+@if (Store.ApiError)
+{
+    <AlertBox />
+}
 
 @if (Store.Categories == null)
 {
