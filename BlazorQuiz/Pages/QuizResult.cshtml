@@ -1,0 +1,26 @@
+﻿@page "/quizresult"
+@using BlazorQuiz.Services
+@inject DataStoreService Store
+
+<h1>Quiz completed</h1>
+
+@if (activeQuiz != null)
+{
+    <div class="jumbotron">
+        <p class="lead">Your score:</p>
+        <ScoreBar score="activeQuiz.Score"></ScoreBar>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">No completed quiz was found.</div>
+}
+
+@functions {
+    private Entities.Quiz activeQuiz { get; set; }
+
+    protected override void OnInit()
+    {
+        activeQuiz = Store.Quizzes.LastOrDefault();
+    }
+}

@@ -1,0 +1,30 @@
+﻿<div class="progress" style="height: 30px;">
+    <div class="progress-bar @GetScoreColorClass(score)"
+         role="progressbar"
+         style="width: @(score)%"
+         aria-valuenow="@(score)"
+         aria-valuemin="0"
+         aria-valuemax="100">
+        <span class="lead">@(score)%</span>
+    </div>
+</div>
+
+@functions {
+[Parameter]
+protected int score { get; set; }
+
+private string GetScoreColorClass(int score)
+{
+    if (score > 75)
+    {
+        return "bg-success";
+    }
+
+    if (score > 35)
+    {
+        return "bg-warning";
+    }
+
+    return "bg-danger";
+}
+}

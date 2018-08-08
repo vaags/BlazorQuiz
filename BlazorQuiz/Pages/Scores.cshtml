@@ -1,0 +1,49 @@
+﻿@page "/scores"
+@using BlazorQuiz.Services
+@inject DataStoreService Store
+
+<h1 class="mb-3">My scores</h1>
+
+@if (completedQuizzes.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Questions</th>
+                <th>Correct answers</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        @foreach (var quiz in completedQuizzes)
+        {
+            <tr>
+                <td>@quiz.Category</td>
+                <td>@quiz.QuestionCount</td>
+                <td>@quiz.Points</td>
+                <td>
+                    <ScoreBar score="quiz.Score"></ScoreBar>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <div class="alert alert-primary" role="alert">
+        No scores yet! Try doing a quiz.
+    </div>
+}
+
+@functions {
+private IEnumerable<Entities.Quiz> completedQuizzes;
+
+    protected override void OnInit()
+    {
+        completedQuizzes =
+            Store.Quizzes
+                 .Where(q => q.IsCompleted)
+                 .OrderByDescending(q => q.Timestamp)
+                 .ToList();
+    }
+}
