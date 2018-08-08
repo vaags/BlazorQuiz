@@ -1,0 +1,91 @@
+﻿@using BlazorQuiz.Services
+@using BlazorQuiz.Entities
+@inject DataStoreService Store
+<div class="card mb-3">
+    <div class="card-body">
+        <p class="lead">@question.question</p>
+        <ul class="list-unstyled">
+            @foreach (var o in options)
+            {
+                <li class="mb-2">
+                    <button class="btn btn-lg @GetButtonCssClass(o)" onclick="@(() => EvaluateAnswer(o))">@o</button>
+                    @if (question.Answer.SelectedAnswer == o)
+                    {
+                        if (question.Answer.IsCorrect)
+                        {
+                            <span class="lead ml-2">Correct! 🙌</span>
+                        }
+                        else
+                        {
+                            <span class="lead ml-2">
+                                Incorrect. 😨 The answer is
+                                <span class="text-primary">@question.Correct_answer</span>
+                            </span>
+                        }
+                    }
+                </li>
+            }
+        </ul>
+        @if (question.Answer.IsAnswered)
+        {
+            <button class="btn btn-lg btn-info mt-2" onclick="@OnGotoNextQuestion">
+                @(isLastQuestion ? "Complete quiz" : "Next")
+                <span class="oi oi-arrow-right ml-3"></span>
+            </button>
+        }
+    </div>
+</div>
+
+@functions {
+    [Parameter]
+    protected Question question { get; set; }
+
+    [Parameter]
+    protected Guid quizId { get; set; }
+
+    [Parameter]
+    protected bool isLastQuestion { get; set; }
+
+    [Parameter]
+    Action OnGotoNextQuestion { get; set; }
+
+    private List<string> options { get; set; }
+
+    private string buttonClass;
+
+    protected override void OnParametersSet()
+    {
+        options = new List<string>();
+
+        options.AddRange(
+            question.Incorrect_answers.Concat(new[] { question.Correct_answer }
+        ).OrderByDescending(o => o));
+    }
+
+    private void EvaluateAnswer(string option)
+    {
+        if (question.Answer.IsAnswered)
+        {
+            return;
+        }
+
+        question.Answer.SelectedAnswer = option;
+        question.Answer.IsCorrect = option == question.Correct_answer;
+        question.Answer.IsAnswered = true;
+
+        if (question.Answer.IsCorrect)
+        {
+            Store.AddQuizPoint(quizId);
+        }
+    }
+
+    private string GetButtonCssClass(string option)
+    {
+        if (question.Answer.SelectedAnswer == option)
+        {
+            return question.Answer.IsCorrect ? "btn-success" : "btn-danger";
+        }
+
+        return "btn-secondary";
+    }
+}

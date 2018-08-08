@@ -1,0 +1,95 @@
+﻿@page "/quiz/{categoryId:int}"
+@using BlazorQuiz.Services
+@using BlazorQuiz.Entities
+@inject DataStoreService Store
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<h1 class="mb-3">@categoryName</h1>
+
+@if (isLoading)
+{
+    <div class="alert alert-info" role="alert">
+        Loading questions ...
+    </div>
+}
+else
+{
+    <div class="progress mb-3">
+      <div class="progress-bar"
+           role="progressbar"
+           style="width: @(currentPosition * 100 / activeQuiz.QuestionCount)%"
+           aria-valuenow="@currentPosition"
+           aria-valuemin="0"
+           aria-valuemax="@activeQuiz.QuestionCount">
+      </div>
+    </div>
+    <QuestionForm question="activeQuestion" quizId="activeQuiz.Id" OnGotoNextQuestion="@GotoNextQuestionOrCompleteQuiz" isLastQuestion="currentPosition == activeQuiz.QuestionCount"></QuestionForm>
+}
+
+@functions {
+
+    [Parameter]
+    protected int categoryId { get; set; }
+
+    private string categoryName { get; set; }
+
+    private bool isLoading { get; set; } = true;
+
+    private Question activeQuestion { get; set; }
+
+    private int currentPosition { get; set; } = 1;
+
+    private Entities.Quiz activeQuiz { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        await InitializeQuiz();
+
+        isLoading = false;
+    }
+
+    private async Task InitializeQuiz()
+    {
+        await CreateNewQuiz();
+        await Store.GetQuestions(categoryId);
+        activeQuestion = Store.Questions[currentPosition - 1];
+
+        activeQuiz = Store.GetActiveQuiz();
+    }
+
+    private async Task CreateNewQuiz()
+    {
+        await Store.GetCategories();
+
+        categoryName = Store.Categories.SingleOrDefault(c => c.Id == categoryId)?
+                                       .Name;
+
+        Store.AddQuiz(categoryName);
+    }
+
+    private void GotoNextQuestionOrCompleteQuiz()
+    {
+        if (currentPosition < activeQuiz.QuestionCount)
+        {
+            GotoNextQuestion();
+        }
+        else
+        {
+            CompleteQuiz();
+        }
+    }
+
+    private void GotoNextQuestion()
+    {
+        currentPosition++;
+        activeQuestion = Store.Questions[currentPosition - 1];
+        this.StateHasChanged();
+    }
+
+    private void CompleteQuiz()
+    {
+        Store.CompleteQuiz(activeQuiz.Id);
+
+        UriHelper.NavigateTo("quizresult");
+    }
+}
