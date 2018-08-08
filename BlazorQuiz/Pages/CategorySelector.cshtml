@@ -1,0 +1,29 @@
+﻿@page "/categoryselector"
+@using BlazorQuiz.Services
+@inject DataStoreService Store
+
+<h1 class="mb-3">Select a category</h1>
+
+@if (Store.Categories == null)
+{
+    <div class="alert alert-info" role="alert">
+        Loading categories ...
+    </div>
+}
+else
+{
+    <ul class="list-unstyled">
+        @foreach (var c in Store.Categories)
+        {
+            <li><a href="quiz/@c.Id" class="btn btn-info mb-2">@c.Name</a></li>
+        }
+    </ul>
+}
+
+@functions {
+
+    protected override async Task OnInitAsync()
+    {
+        await Store.GetCategories();
+    }
+}

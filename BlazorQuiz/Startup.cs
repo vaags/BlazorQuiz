@@ -1,3 +1,4 @@
+using BlazorQuiz.Services;
 using Microsoft.AspNetCore.Blazor.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,6 +8,8 @@ namespace BlazorQuiz
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IQuizApiService, QuizApiService>();
+            services.AddSingleton<DataStoreService>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)
