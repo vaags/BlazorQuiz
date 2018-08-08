@@ -51,7 +51,6 @@ namespace BlazorQuiz.Services
                 if (result?.Response_code == ResponseCode.Success)
                 {
                     Questions = result.Results.ToList();
-                    ApiError = true;
                 }
                 else
                 {
