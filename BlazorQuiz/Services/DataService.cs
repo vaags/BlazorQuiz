@@ -56,7 +56,7 @@ namespace BlazorQuiz.Services
                 {
                     ApiError = true;
                 }
-                            }
+            }
             catch (Exception)
             {
                 ApiError = true;
