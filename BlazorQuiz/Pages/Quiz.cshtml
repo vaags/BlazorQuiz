@@ -23,12 +23,12 @@ else
       <div class="progress-bar"
            role="progressbar"
            style="width: @(currentPosition * 100 / activeQuiz.QuestionCount)%"
-           aria-valuenow="@currentPosition"
+           aria-valuenow="@(currentPosition)"
            aria-valuemin="0"
-           aria-valuemax="@activeQuiz.QuestionCount">
+           aria-valuemax="@(activeQuiz.QuestionCount)">
       </div>
     </div>
-    <QuestionForm question="activeQuestion" quizId="activeQuiz.Id" OnGotoNextQuestion="@GotoNextQuestionOrCompleteQuiz" isLastQuestion="currentPosition == activeQuiz.QuestionCount"></QuestionForm>
+    <QuestionForm question="@activeQuestion" quizId="@activeQuiz.Id" OnGotoNextQuestion="@GotoNextQuestionOrCompleteQuiz" isLastQuestion="@(currentPosition == activeQuiz.QuestionCount)"></QuestionForm>
 }
 
 @functions {
